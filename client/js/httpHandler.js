@@ -16,14 +16,11 @@
       success: (command) => {
         // reload the page
         SwimTeam.move(command);
-        // console.log(command, "is the command");
-
-        // window.location = window.location.href;
       }
     });
   };
 
-  setInterval(function(){swimCommandFetcher()}, 1000);
+  setInterval(function(){swimCommandFetcher()}, 100);
 
 
 
