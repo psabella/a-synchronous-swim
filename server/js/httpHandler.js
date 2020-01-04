@@ -18,17 +18,26 @@ module.exports.router = (req, res, next = ()=>{}) => {
   // const validMessages = ['left', 'right', 'up', 'down'];
   // var rand = validMessages[Math.floor(Math.random() * validMessages.length)];
 
-  res.writeHead(200, headers);
-  if (messageQueue) {
-    var firstInLine = messageQueue.dequeue();
-    if (req.method === 'GET') {
+  // if background image missing, return 404
+
+  if (req.method === 'GET' && req.url === '/') {
+    if (messageQueue) {
+      var firstInLine = messageQueue.dequeue();
+      res.writeHead(200, headers);
       res.end(firstInLine);
+    } else {
+      res.writeHead(200, headers);
+      res.end();
     }
-  } else {
-    res.end();
+  } else if (req.method === 'GET' && req.url === this.backgroundImageFile) {
+    if (this.backgroundImageFile !== path.join('.', 'background.jpg')) {
+      res.writeHead(404, headers);
+      res.end();
+    }
   }
 
   if (req.method === 'OPTIONS') {
+    res.writeHead(200, headers);
     res.end();
   }
 
