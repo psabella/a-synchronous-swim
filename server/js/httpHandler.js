@@ -17,12 +17,17 @@ module.exports.router = (req, res, next = ()=>{}) => {
   // console.log('Serving request type ' + req.method + ' for url ' + req.url);
   // const validMessages = ['left', 'right', 'up', 'down'];
   // var rand = validMessages[Math.floor(Math.random() * validMessages.length)];
-  var firstInLine = messageQueue.dequeue();
 
   res.writeHead(200, headers);
-  if (req.method === 'GET') {
-    res.end(firstInLine);
+  if (messageQueue) {
+    var firstInLine = messageQueue.dequeue();
+    if (req.method === 'GET') {
+      res.end(firstInLine);
+    }
+  } else {
+    res.end();
   }
+
   if (req.method === 'OPTIONS') {
     res.end();
   }
