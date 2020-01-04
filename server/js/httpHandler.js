@@ -20,26 +20,43 @@ module.exports.router = (req, res, next = ()=>{}) => {
 
   // if background image missing, return 404
 
-  if (req.method === 'GET' && req.url === '/') {
-    if (messageQueue) {
-      var firstInLine = messageQueue.dequeue();
-      res.writeHead(200, headers);
+  res.writeHead(200, headers);
+  if (messageQueue) {
+    var firstInLine = messageQueue.dequeue();
+    if (req.method === 'GET') {
       res.end(firstInLine);
-    } else {
-      res.writeHead(200, headers);
-      res.end();
     }
-  } else if (req.method === 'GET' && req.url === this.backgroundImageFile) {
-    if (this.backgroundImageFile !== path.join('.', 'background.jpg')) {
-      res.writeHead(404, headers);
-      res.end();
-    }
-  }
-
-  if (req.method === 'OPTIONS') {
-    res.writeHead(200, headers);
+  } else {
     res.end();
   }
+  if (req.method === 'OPTIONS') {
+    res.end();
+  }
+
+  // *THIS BROKE STUFF BUT MADE BACKGROUND IMAGE TESTS PASS*
+  // if (req.method === 'GET' && req.url === '/') {
+  //   if (messageQueue) {
+  //     var firstInLine = messageQueue.dequeue();
+  //     res.writeHead(200, headers);
+  //     res.end(firstInLine);
+  //   } else {
+  //     res.writeHead(200, headers);
+  //     res.end();
+  //   }
+  // } else if (req.method === 'GET' && req.url === this.backgroundImageFile) {
+  //   if (this.backgroundImageFile !== path.join('.', 'background.jpg')) {
+  //     res.writeHead(404, headers);
+  //     res.end();
+  //   } else {
+  //     res.writeHead(200, headers);
+  //     res.end();
+  //   }
+  // }
+
+  // if (req.method === 'OPTIONS') {
+  //   res.writeHead(200, headers);
+  //   res.end();
+  // }
 
   next(); // invoke next() at the end of a request to help with testing!
 };
