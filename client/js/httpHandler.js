@@ -8,19 +8,20 @@
   const swimCommandFetcher = () => {
     $.ajax({
       type: 'GET',
-      // data: data,
       url: serverUrl,
-      cache: false,
-      contentType: false,
-      processData: false,
       success: (command) => {
-        // reload the page
         SwimTeam.move(command);
       }
+      // add another property complete to specify another action to perform once the request is complete
+      /* complete: () => {
+        setTimeout(swimCommandFetcher, 10);
+      }*/
     });
   };
 
   setInterval(function(){swimCommandFetcher()}, 100);
+  // if using complete above, then just need to initially call the function
+  // setTimeout(swimCommandFetcher, 0);
 
 
 

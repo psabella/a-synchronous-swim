@@ -21,21 +21,21 @@ module.exports.router = (req, res, next = ()=>{}) => {
   // if background image missing, return 404
 
   if (req.method === 'GET') {
-    if (req.url === this.backgroundImageFile) {
-      if (this.backgroundImageFile !== path.join('.', 'background.jpg')) {
-        res.writeHead(404, headers);
+    if (req.url === './background.jpg') {
+      fs.readFile(module.exports.backgroundImageFile, (err, data) => {
+        if (err) {
+          res.writeHead(404, headers);
+        } else {
+          res.writeHead(200, headers);
+          res.write(data, 'binary');
+        }
         res.end();
-      } else {
-        res.writeHead(200, headers);
-        res.end();
-      }
-    } else {
+      })
+    } else if (req.url === '/') {
+      res.writeHead(200, headers);
       if (messageQueue) {
-        var firstInLine = messageQueue.dequeue();
-        res.writeHead(200, headers);
-        res.end(firstInLine);
+        res.end(messageQueue.dequeue());
       } else {
-        res.writeHead(200, headers);
         res.end();
       }
     }
