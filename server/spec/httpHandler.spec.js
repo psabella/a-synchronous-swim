@@ -5,6 +5,7 @@ const expect = require('chai').expect;
 const server = require('./mockServer');
 
 const httpHandler = require('../js/httpHandler');
+const _ = require('underscore');
 
 
 
@@ -22,7 +23,17 @@ describe('server responses', () => {
   });
 
   it('should respond to a GET request for a swim command', (done) => {
-    // write your test here
+    const validMessages = ['left', 'right', 'up', 'down'];
+    const isValidMessage = (message) => {
+      return _.contains(validMessages, message);
+    };
+    let {req, res} = server.mock('/', 'GET');
+
+    httpHandler.router(req, res);
+    expect(res._responseCode).to.equal(200);
+    expect(res._ended).to.equal(true);
+    expect(isValidMessage(res._data.toString())).to.equal(true); // expect up, down, left, right
+
     done();
   });
 
